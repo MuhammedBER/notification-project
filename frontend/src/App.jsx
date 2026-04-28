@@ -7,8 +7,7 @@ import { Login } from './components/Login';
 import { VerifyEmail } from './components/VerifyEmail';
 import { ResetPassword } from './components/ResetPassword';
 import { useAuth } from './context/AuthContext';
-import { useNotifications, NotificationProvider } from './components/NotificationProvider';
-import './App.css';
+import { NotificationProvider } from './components/NotificationProvider';
 
 function AppContent() {
     const { user, isLoading } = useAuth();
