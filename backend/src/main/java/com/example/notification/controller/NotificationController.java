@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/notifications")
-@CrossOrigin(origins = "*") // Allow all origins for dev. restrict in prod!
 public class NotificationController {
 
     private final NotificationService notificationService;
