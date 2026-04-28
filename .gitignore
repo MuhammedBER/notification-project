@@ -1,4 +1,5 @@
 # deployment notes
+00_global_deployment_guide.md
 01_database_deployment_neon.md
 02_backend_deployment_render.md
 03_frontend_deployment_vercel.md
