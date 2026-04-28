@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
     const fetchUserProfile = async (jwt) => {
         try {
-            const response = await fetch('http://192.168.100.12:8080/api/users/me', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/users/me`, {
                 headers: { 'Authorization': `Bearer ${jwt}` }
             });
             if (response.ok) {
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const login = async (username, password) => {
-        const response = await fetch('http://192.168.100.12:8080/api/auth/login', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const register = async (username, password) => {
-        const response = await fetch('http://192.168.100.12:8080/api/auth/register', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })

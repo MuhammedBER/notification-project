@@ -26,7 +26,7 @@ export const NotificationProvider = ({ children }) => {
         }
 
         // Fetch historical notifications
-        fetch('http://192.168.100.12:8080/api/notifications/history', {
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/notifications/history`, {
             headers: { 'Authorization': `Bearer ${token}` }
         })
             .then(res => res.json())
@@ -35,7 +35,7 @@ export const NotificationProvider = ({ children }) => {
 
         // Setup WebSocket client
         const client = new Client({
-            webSocketFactory: () => new SockJS('http://192.168.100.12:8080/ws-notifications'),
+            webSocketFactory: () => new SockJS(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/ws-notifications`),
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
             heartbeatOutgoing: 4000,

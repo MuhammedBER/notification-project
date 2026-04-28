@@ -19,7 +19,7 @@ export const Profile = () => {
         setMessage('');
 
         try {
-            const response = await fetch('http://192.168.100.12:8080/api/users/me/password', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/users/me/password`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

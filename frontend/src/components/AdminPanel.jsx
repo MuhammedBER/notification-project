@@ -17,7 +17,7 @@ export const AdminPanel = () => {
         setIsLoading(true);
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch('http://192.168.100.12:8080/api/game/challenge', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/game/challenge`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export const AdminPanel = () => {
         const token = localStorage.getItem('token');
 
         try {
-            const response = await fetch('http://192.168.100.12:8080/api/notifications/send', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/notifications/send`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
