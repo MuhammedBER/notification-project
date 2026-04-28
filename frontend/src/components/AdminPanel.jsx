@@ -1,136 +1,152 @@
-import React, { useState } from 'react';
-import { Send, Gamepad2 } from 'lucide-react';
-import './AdminPanel.css';
-import { useNotifications } from './NotificationProvider';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './ui/card';
+import { Send, Users } from 'lucide-react';
 
-export const AdminPanel = () => {
+export function AdminPanel() {
+    const { token } = useAuth();
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
     const [type, setType] = useState('INFO');
-    const [isLoading, setIsLoading] = useState(false);
+    const [recipient, setRecipient] = useState('');
+    const [users, setUsers] = useState([]);
+    const [isSending, setIsSending] = useState(false);
+    const [status, setStatus] = useState(null);
 
-    const [recipientUsername, setRecipientUsername] = useState('');
-    const { setActiveGameId } = useNotifications();
+    useEffect(() => {
+        fetchUsers();
+    }, [token]);
 
-    const handleChallenge = async () => {
-        if (!recipientUsername) return;
-        setIsLoading(true);
-        const token = localStorage.getItem('token');
+    const fetchUsers = async () => {
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/game/challenge`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ targetUsername: recipientUsername })
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/users/all`, {
+                headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
-                const game = await response.json();
-                setActiveGameId(game.gameId);
-            } else {
-                alert("Failed to challenge user. Did you restart the server and enter a valid user?");
+                const data = await response.json();
+                setUsers(data);
             }
         } catch (error) {
-            console.error('Failed to issue challenge', error);
-            alert("Network Error: Could not connect to backend server. Make sure it is running!");
-        } finally {
-            setIsLoading(false);
+            console.error("Failed to fetch users", error);
         }
     };
 
     const handleSend = async (e) => {
         e.preventDefault();
-        if (!title || !message) return;
-
-        setIsLoading(true);
-        // We use the auth token from localStorage just for demo, or context (but here localStorage is faster if we don't refactor AdminPanel to use context)
-        const token = localStorage.getItem('token');
+        setIsSending(true);
+        setStatus(null);
 
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/notifications/send`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ title, message, type, recipientUsername: recipientUsername || null })
+                body: JSON.stringify({
+                    title,
+                    message,
+                    type,
+                    recipientUsername: recipient || null
+                })
             });
 
             if (response.ok) {
+                setStatus({ type: 'success', message: 'Notification sent successfully!' });
                 setTitle('');
                 setMessage('');
-                setRecipientUsername('');
+            } else {
+                setStatus({ type: 'error', message: 'Failed to send notification.' });
             }
         } catch (error) {
-            console.error('Failed to send notification', error);
+            setStatus({ type: 'error', message: 'An error occurred.' });
         } finally {
-            setIsLoading(false);
+            setIsSending(false);
         }
     };
 
     return (
-        <div className="admin-panel glass">
-            <div className="panel-header">
-                <h2>Broadcast Event</h2>
-            </div>
-            <form onSubmit={handleSend} className="admin-form">
-                <div className="form-group">
-                    <label>Target User (Optional)</label>
-                    <input
-                        type="text"
-                        value={recipientUsername}
-                        onChange={(e) => setRecipientUsername(e.target.value)}
-                        placeholder="Leave blank for Global Broadcast"
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Title</label>
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="e.g. Server Update"
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Message</label>
-                    <textarea
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Detailed message..."
-                        rows="3"
-                        required
-                    />
-                </div>
-                <div className="form-group row">
-                    <label>Type</label>
-                    <div className="type-selectors">
-                        {['INFO', 'SUCCESS', 'WARNING', 'ERROR'].map(t => (
-                            <label key={t} className={`type-label ${type === t ? 'active' : ''} type-${t.toLowerCase()}`}>
-                                <input
-                                    type="radio"
-                                    name="type"
-                                    value={t}
-                                    checked={type === t}
-                                    onChange={() => setType(t)}
-                                />
-                                {t}
-                            </label>
-                        ))}
+        <Card className="w-full">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                    <Send className="w-5 h-5 text-primary" />
+                    Send Notification
+                </CardTitle>
+                <CardDescription>
+                    Broadcast a message to all users or target a specific one.
+                </CardDescription>
+            </CardHeader>
+            <form onSubmit={handleSend}>
+                <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Recipient</label>
+                        <select 
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            value={recipient}
+                            onChange={(e) => setRecipient(e.target.value)}
+                        >
+                            <option value="">All Users (Global)</option>
+                            {users.map(u => (
+                                <option key={u.id} value={u.username}>
+                                    {u.username} ({u.email})
+                                </option>
+                            ))}
+                        </select>
                     </div>
-                </div>
-                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
-                    <button type="submit" className="btn-send" disabled={isLoading || !title || !message} style={{ flex: 1 }}>
-                        <Send size={18} />
-                        {isLoading ? 'Wait...' : 'Send Notification'}
-                    </button>
-                    <button type="button" className="btn-send" onClick={handleChallenge} disabled={isLoading || !recipientUsername} style={{ flex: 1, background: 'var(--success-color)' }}>
-                        <Gamepad2 size={18} /> challenge XO
-                    </button>
-                </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Type</label>
+                        <select 
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            value={type}
+                            onChange={(e) => setType(e.target.value)}
+                        >
+                            <option value="INFO">Information</option>
+                            <option value="SUCCESS">Success</option>
+                            <option value="WARNING">Warning</option>
+                            <option value="ERROR">Error</option>
+                        </select>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Title</label>
+                        <Input 
+                            placeholder="Notification title..." 
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium">Message</label>
+                        <textarea 
+                            className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                            placeholder="Type your message here..."
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    {status && (
+                        <div className={cn(
+                            "p-3 rounded-md text-sm font-medium",
+                            status.type === 'success' ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                        )}>
+                            {status.message}
+                        </div>
+                    )}
+                </CardContent>
+                <CardFooter>
+                    <Button type="submit" className="w-full gap-2" disabled={isSending}>
+                        <Send className="w-4 h-4" />
+                        {isSending ? "Sending..." : "Send Notification"}
+                    </Button>
+                </CardFooter>
             </form>
-        </div>
+        </Card>
     );
-};
+}

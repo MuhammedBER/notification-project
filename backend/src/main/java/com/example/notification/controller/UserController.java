@@ -38,4 +38,8 @@ public class UserController {
 
         return ResponseEntity.ok("Password updated successfully");
     }
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsers() {
+        return ResponseEntity.ok(userRepository.findAll());
+    }
 }

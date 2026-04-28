@@ -1,64 +1,61 @@
 import React from 'react';
 import { useNotifications } from './NotificationProvider';
 import { Bell, Info, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
-import './NotificationList.css';
+import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
+import { cn } from '../lib/utils';
 
 const IconMap = {
-    INFO: <Info className="icon icon-info" />,
-    WARNING: <AlertTriangle className="icon icon-warning" />,
-    SUCCESS: <CheckCircle className="icon icon-success" />,
-    ERROR: <XCircle className="icon icon-error" />
+    INFO: <Info className="w-4 h-4 text-blue-500" />,
+    WARNING: <AlertTriangle className="w-4 h-4 text-amber-500" />,
+    SUCCESS: <CheckCircle className="w-4 h-4 text-green-500" />,
+    ERROR: <XCircle className="w-4 h-4 text-red-500" />
 };
 
 export const NotificationList = () => {
     const { notifications, isConnected } = useNotifications();
 
     return (
-        <div className="notification-panel glass slide-in">
-            <div className="panel-header">
-                <div className="header-title">
-                    <Bell className="header-icon" />
-                    <h2>Notifications</h2>
+        <Card className="w-full h-full flex flex-col">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 border-b">
+                <div className="flex items-center gap-2">
+                    <Bell className="w-5 h-5 text-primary" />
+                    <CardTitle className="text-xl">Activity Feed</CardTitle>
                 </div>
-                <div className={`status-badge ${isConnected ? 'online' : 'offline'}`}>
-                    {isConnected ? 'Live' : 'Reconnecting...'}
+                <div className={cn(
+                    "px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors",
+                    isConnected ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700 animate-pulse"
+                )}>
+                    {isConnected ? 'Live' : 'Disconnected'}
                 </div>
-            </div>
+            </CardHeader>
             
-            <div className="notification-list">
+            <CardContent className="flex-1 overflow-y-auto p-0">
                 {notifications.length === 0 ? (
-                    <div className="empty-state">No notifications.</div>
+                    <div className="flex flex-col items-center justify-center h-48 text-muted-foreground gap-2">
+                        <Bell className="w-8 h-8 opacity-20" />
+                        <p className="text-sm">No recent activity to show.</p>
+                    </div>
                 ) : (
-                    notifications.map((notif, idx) => (
-                        <div key={notif.id || idx} className="notification-item">
-                            <div className="notification-icon">
-                                {IconMap[notif.type] || IconMap['INFO']}
-                            </div>
-                            <div className="notification-content">
-                                <div className="notification-header">
-                                    <h4>{notif.title}</h4>
-                                    <span className="time">
-                                        {new Date(notif.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                                    </span>
+                    <div className="divide-y">
+                        {notifications.map((notif, idx) => (
+                            <div key={notif.id || idx} className="p-4 hover:bg-muted/30 transition-colors flex gap-4">
+                                <div className="mt-1">
+                                    {IconMap[notif.type] || IconMap['INFO']}
                                 </div>
-                                <p>{notif.message}</p>
-                                {notif.title === 'Game Challenge!' && notif.message.includes('Game ID: ') && (
-                                    <button 
-                                        className="btn-join-game"
-                                        onClick={() => {
-                                            const idMatch = notif.message.match(/Game ID: ([a-zA-Z0-9-]+)/);
-                                            if (idMatch) useNotifications().setActiveGameId(idMatch[1]);
-                                        }}
-                                        style={{ marginTop: '8px', padding: '4px 8px', background: 'var(--success-color)', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize:'0.75rem', fontWeight:'bold' }}
-                                    >
-                                        Join Game
-                                    </button>
-                                )}
+                                <div className="flex-1 space-y-1">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <h4 className="text-sm font-semibold leading-none">{notif.title}</h4>
+                                        <span className="text-[10px] text-muted-foreground font-mono">
+                                            {new Date(notif.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                                        </span>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground line-clamp-2">{notif.message}</p>
+                                </div>
                             </div>
-                        </div>
-                    ))
+                        ))}
+                    </div>
                 )}
-            </div>
-        </div>
+            </CardContent>
+        </Card>
     );
 };
