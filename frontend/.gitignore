@@ -7,6 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+
 node_modules
 dist
 dist-ssr
@@ -22,3 +23,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Set Up
+
+00_global_deployment_guide.md
+1_database_deployment_neon.md
+2_backend_deployment_render.md
+3_frontend_deployment_vercel.md
+4_free_domain_setup.md
+6_docker_deployment_guide.md
