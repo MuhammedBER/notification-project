@@ -1,7 +1,12 @@
-# Set Up
-00_global_deployment_guide.md
-1_database_deployment_neon.md
-2_backend_deployment_render.md
-3_frontend_deployment_vercel.md
-4_free_domain_setup.md
-6_docker_deployment_guide.md
+# deployment notes
+01_database_deployment_neon.md
+02_backend_deployment_render.md
+03_frontend_deployment_vercel.md
+04_free_domain_setup.md
+
+# system files
+.vscode/
+node_modules/
+target/
+dist/
+.env
