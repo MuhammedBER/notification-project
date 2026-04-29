@@ -4,17 +4,20 @@ import { ToastContainer } from './components/ToastContainer';
 import { AdminPanel } from './components/AdminPanel';
 import { Profile } from './components/Profile';
 import { Login } from './components/Login';
-import { TicTacToe } from './components/TicTacToe';
 import { useAuth } from './context/AuthContext';
 import { useNotifications, NotificationProvider } from './components/NotificationProvider';
 import './App.css';
 
 function AppContent() {
     const { user, isLoading } = useAuth();
-    const { activeGameId, setActiveGameId } = useNotifications();
 
     if (isLoading) {
-        return <div style={{ display:'flex', justifyContent:'center', marginTop:'20vh' }}>Loading Dashboard...</div>;
+        return (
+            <div className="loading-screen">
+                <div className="loader"></div>
+                <p>Synchronizing systems...</p>
+            </div>
+        );
     }
 
     if (!user) {
@@ -22,23 +25,34 @@ function AppContent() {
     }
 
     return (
-        <div className="app-container fade-in">
+        <div className="app-container slide-up">
             <header className="app-header">
-                <h1>Real-Time Operations Center</h1>
+                <h1 className="text-gradient">Nova Command</h1>
+                <div className="user-badge glass-card">
+                    <div className="status-dot online"></div>
+                    <span>System Active</span>
+                </div>
             </header>
             
             <main className="app-content">
-                <div className="left-column">
+                <aside className="left-column">
                     <Profile />
                     <AdminPanel />
-                </div>
-                <div className="right-column">
-                    {activeGameId ? (
-                        <TicTacToe gameId={activeGameId} onExit={() => setActiveGameId(null)} />
-                    ) : (
-                        <NotificationList />
-                    )}
-                </div>
+                </aside>
+                
+                <section className="right-column">
+                    <div className="dashboard-stats">
+                        <div className="stat-card glass-card">
+                            <span className="stat-label">System Health</span>
+                            <span className="stat-value">99.9%</span>
+                        </div>
+                        <div className="stat-card glass-card">
+                            <span className="stat-label">Response Time</span>
+                            <span className="stat-value">24ms</span>
+                        </div>
+                    </div>
+                    <NotificationList />
+                </section>
             </main>
             
             <ToastContainer />

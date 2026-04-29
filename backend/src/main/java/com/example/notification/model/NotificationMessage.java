@@ -19,17 +19,20 @@ public class NotificationMessage {
     
     private String recipientUsername; // null means global broadcast
     
+    private String senderName;
+    
     private LocalDateTime timestamp;
 
     public NotificationMessage() {
         this.timestamp = LocalDateTime.now();
     }
 
-    public NotificationMessage(String title, String message, String type, String recipientUsername) {
+    public NotificationMessage(String title, String message, String type, String recipientUsername, String senderName) {
         this.title = title;
         this.message = message;
         this.type = type;
         this.recipientUsername = recipientUsername;
+        this.senderName = senderName;
         this.timestamp = LocalDateTime.now();
     }
 
@@ -79,5 +82,13 @@ public class NotificationMessage {
 
     public void setRecipientUsername(String recipientUsername) {
         this.recipientUsername = recipientUsername;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 }

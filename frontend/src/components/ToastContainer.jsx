@@ -4,30 +4,24 @@ import { X, Info, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import './Toast.css';
 
 const IconMap = {
-    INFO: <Info className="icon icon-info" />,
-    WARNING: <AlertTriangle className="icon icon-warning" />,
-    SUCCESS: <CheckCircle className="icon icon-success" />,
-    ERROR: <XCircle className="icon icon-error" />
+    INFO: <Info size={18} />,
+    WARNING: <AlertTriangle size={18} />,
+    SUCCESS: <CheckCircle size={18} />,
+    ERROR: <XCircle size={18} />
 };
 
 export const ToastContainer = () => {
-    const { notifications, dismissNotification } = useNotifications();
+    const { notifications } = useNotifications();
     const [activeToasts, setActiveToasts] = useState([]);
 
-    // Watch for new notifications and add them to active toasts
     useEffect(() => {
         if (notifications.length > 0) {
             const latest = notifications[0];
-            // Check if it's new (in real app, we might check timestamps or have a 'viewed' flag)
-            // For simplicity, we just add the newest one if it's not already in toasts
             if (!activeToasts.find(t => t.id === latest.id)) {
-                setActiveToasts(prev => [latest, ...prev].slice(0, 5)); // Keep max 5 toasts
-                
-                // Auto-dismiss after 5 seconds
+                setActiveToasts(prev => [latest, ...prev].slice(0, 5));
                 const timer = setTimeout(() => {
                     removeToast(latest.id);
                 }, 5000);
-                
                 return () => clearTimeout(timer);
             }
         }
@@ -40,7 +34,7 @@ export const ToastContainer = () => {
     return (
         <div className="toast-container">
             {activeToasts.map(toast => (
-                <div key={toast.id} className={`toast fade-in slide-in type-${toast.type}`}>
+                <div key={toast.id} className={`toast slide-up type-${toast.type}`}>
                     <div className="toast-icon">
                         {IconMap[toast.type] || IconMap['INFO']}
                     </div>
@@ -49,7 +43,7 @@ export const ToastContainer = () => {
                         <p>{toast.message}</p>
                     </div>
                     <button className="toast-close" onClick={() => removeToast(toast.id)}>
-                        <X size={16} />
+                        <X size={18} />
                     </button>
                     <div className="toast-progress"></div>
                 </div>

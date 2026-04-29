@@ -1,129 +1,100 @@
 .admin-panel {
-    padding: 1.5rem;
+    padding: 2rem;
 }
 
-.panel-header {
+.panel-title {
+    font-size: 1.25rem;
+    font-weight: 700;
     margin-bottom: 1.5rem;
-}
-
-.panel-header h2 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-color);
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .admin-form {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1.5rem;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: 0.375rem;
-}
-
-.form-group.row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
 .form-group label {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: var(--text-color);
-}
-
-.admin-form input[type="text"],
-.admin-form textarea {
-    width: 100%;
-    padding: 0.625rem 0.75rem;
-    background: #fff;
-    border: 1px solid var(--surface-border);
-    border-radius: 6px;
-    color: var(--text-color);
-    font-family: inherit;
-    font-size: 0.875rem;
-    transition: border-color 0.15s, box-shadow 0.15s;
-    box-shadow: var(--shadow-sm);
-}
-
-.admin-form input[type="text"]::placeholder,
-.admin-form textarea::placeholder {
+    font-size: 0.85rem;
+    font-weight: 600;
     color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-.admin-form input[type="text"]:focus,
-.admin-form textarea:focus {
+.user-select,
+.admin-input,
+.admin-textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 0.95rem;
     outline: none;
-    border-color: #94a3b8;
-    box-shadow: 0 0 0 3px #f1f5f9;
+}
+
+.user-select:focus,
+.admin-input:focus,
+.admin-textarea:focus {
+    border-color: var(--accent-primary);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .type-selectors {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.type-option {
+    position: relative;
+    cursor: pointer;
+}
+
+.type-option input {
+    position: absolute;
+    opacity: 0;
+}
+
+.type-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.type-option input:checked + .type-box {
+    background: rgba(88, 166, 255, 0.1);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+}
+
+.type-box.type-success { border-left: 3px solid var(--success); }
+.type-box.type-warning { border-left: 3px solid var(--warning); }
+.type-box.type-error { border-left: 3px solid var(--error); }
+.type-box.type-info { border-left: 3px solid var(--info); }
+
+.btn-dispatch {
     width: 100%;
-}
-
-.type-label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.75rem !important;
-    font-weight: 500 !important;
-    border: 1px solid var(--surface-border);
-    background: #fff;
-    color: var(--text-color);
-    transition: all 0.15s;
-}
-
-.type-label input {
-    display: none;
-}
-
-.type-label:hover {
-    background: #f8fafc;
-}
-
-.type-label.active {
-    border-color: var(--primary-color);
-    background: var(--primary-color);
-    color: var(--primary-text);
-}
-
-.btn-send {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.625rem;
-    background: var(--primary-color);
-    color: var(--primary-text);
-    border: none;
-    border-radius: 6px;
-    font-family: inherit;
-    font-weight: 500;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: background-color 0.15s;
     margin-top: 0.5rem;
-    box-shadow: var(--shadow-sm);
-}
-
-.btn-send:hover:not(:disabled) {
-    background: var(--primary-hover);
-}
-
-.btn-send:disabled {
-    background: #e2e8f0;
-    color: #94a3b8;
-    cursor: not-allowed;
-    box-shadow: none;
 }

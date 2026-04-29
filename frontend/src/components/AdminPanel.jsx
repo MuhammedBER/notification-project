@@ -1,50 +1,36 @@
-import React, { useState } from 'react';
-import { Send, Gamepad2 } from 'lucide-react';
-import './AdminPanel.css';
-import { useNotifications } from './NotificationProvider';
+import { Send, Zap, Users, MessageSquare, Terminal } from 'lucide-react';
 
 export const AdminPanel = () => {
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
     const [type, setType] = useState('INFO');
     const [isLoading, setIsLoading] = useState(false);
-
     const [recipientUsername, setRecipientUsername] = useState('');
-    const { setActiveGameId } = useNotifications();
+    const [users, setUsers] = useState([]);
 
-    const handleChallenge = async () => {
-        if (!recipientUsername) return;
-        setIsLoading(true);
-        const token = localStorage.getItem('token');
-        try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/game/challenge`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ targetUsername: recipientUsername })
-            });
-            if (response.ok) {
-                const game = await response.json();
-                setActiveGameId(game.gameId);
-            } else {
-                alert("Failed to challenge user. Did you restart the server and enter a valid user?");
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/users`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setUsers(data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch users", error);
             }
-        } catch (error) {
-            console.error('Failed to issue challenge', error);
-            alert("Network Error: Could not connect to backend server. Make sure it is running!");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        };
+        fetchUsers();
+    }, []);
 
     const handleSend = async (e) => {
         e.preventDefault();
         if (!title || !message) return;
 
         setIsLoading(true);
-        // We use the auth token from localStorage just for demo, or context (but here localStorage is faster if we don't refactor AdminPanel to use context)
         const token = localStorage.getItem('token');
 
         try {
@@ -70,45 +56,67 @@ export const AdminPanel = () => {
     };
 
     return (
-        <div className="admin-panel glass">
-            <div className="panel-header">
-                <h2>Broadcast Event</h2>
-            </div>
+        <div className="admin-panel glass-card">
+            <h2 className="panel-title">
+                <Terminal size={20} className="text-gradient" />
+                <span>Dispatch Center</span>
+            </h2>
+            
             <form onSubmit={handleSend} className="admin-form">
                 <div className="form-group">
-                    <label>Target User (Optional)</label>
-                    <input
-                        type="text"
+                    <label>
+                        <Users size={14} style={{ marginRight: '6px' }} />
+                        Target Audience
+                    </label>
+                    <select
                         value={recipientUsername}
                         onChange={(e) => setRecipientUsername(e.target.value)}
-                        placeholder="Leave blank for Global Broadcast"
-                    />
+                        className="user-select"
+                    >
+                        <option value="">Global Broadcast</option>
+                        {users.map(u => (
+                            <option key={u.id} value={u.username}>
+                                Node: {u.username}
+                            </option>
+                        ))}
+                    </select>
                 </div>
+
                 <div className="form-group">
-                    <label>Title</label>
+                    <label>
+                        <Zap size={14} style={{ marginRight: '6px' }} />
+                        Signal Title
+                    </label>
                     <input
                         type="text"
+                        className="admin-input"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        placeholder="e.g. Server Update"
+                        placeholder="Define signal header..."
                         required
                     />
                 </div>
+
                 <div className="form-group">
-                    <label>Message</label>
+                    <label>
+                        <MessageSquare size={14} style={{ marginRight: '6px' }} />
+                        Payload
+                    </label>
                     <textarea
+                        className="admin-textarea"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Detailed message..."
+                        placeholder="Enter transmission data..."
                         rows="3"
                         required
                     />
                 </div>
-                <div className="form-group row">
-                    <label>Type</label>
+
+                <div className="form-group">
+                    <label>Classification</label>
                     <div className="type-selectors">
                         {['INFO', 'SUCCESS', 'WARNING', 'ERROR'].map(t => (
-                            <label key={t} className={`type-label ${type === t ? 'active' : ''} type-${t.toLowerCase()}`}>
+                            <label key={t} className="type-option">
                                 <input
                                     type="radio"
                                     name="type"
@@ -116,20 +124,18 @@ export const AdminPanel = () => {
                                     checked={type === t}
                                     onChange={() => setType(t)}
                                 />
-                                {t}
+                                <div className={`type-box type-${t.toLowerCase()}`}>
+                                    {t}
+                                </div>
                             </label>
                         ))}
                     </div>
                 </div>
-                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
-                    <button type="submit" className="btn-send" disabled={isLoading || !title || !message} style={{ flex: 1 }}>
-                        <Send size={18} />
-                        {isLoading ? 'Wait...' : 'Send Notification'}
-                    </button>
-                    <button type="button" className="btn-send" onClick={handleChallenge} disabled={isLoading || !recipientUsername} style={{ flex: 1, background: 'var(--success-color)' }}>
-                        <Gamepad2 size={18} /> challenge XO
-                    </button>
-                </div>
+
+                <button type="submit" className="btn-premium btn-dispatch" disabled={isLoading || !title || !message}>
+                    <Send size={18} />
+                    {isLoading ? 'Transmitting...' : 'Dispatch Signal'}
+                </button>
             </form>
         </div>
     );

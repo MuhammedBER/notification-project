@@ -44,14 +44,13 @@ export const Profile = () => {
     if (!user) return null;
 
     return (
-        <div className="profile-panel glass">
-            <div className="panel-header">
-                <h2>User Profile</h2>
-            </div>
-
+        <div className="profile-panel glass-card">
             <div className="profile-info">
-                <div className="avatar">
-                    <User size={32} />
+                <div className="avatar-container">
+                    <div className="avatar">
+                        <User size={32} />
+                    </div>
+                    <div className="avatar-ring"></div>
                 </div>
                 <div>
                     <h3 className="username">@{user.username}</h3>
@@ -60,26 +59,31 @@ export const Profile = () => {
             </div>
 
             <form onSubmit={handlePasswordChange} className="password-form">
-                <div className="form-group">
-                    <label><Key size={14} /> Change Password</label>
+                <div className="form-header">
+                    <Key size={16} /> 
+                    <span>Access Security</span>
+                </div>
+                
+                <div className="input-wrapper">
                     <input
                         type="password"
                         value={newPassword}
                         onChange={e => setNewPassword(e.target.value)}
-                        placeholder="New password"
+                        placeholder="Configure new password"
                         required
                     />
                 </div>
-                {message && <div className="success-msg">{message}</div>}
-                {error && <div className="error-msg">{error}</div>}
 
-                <button type="submit" className="btn-secondary" disabled={isLoading || !newPassword}>
-                    {isLoading ? 'Updating...' : 'Update Password'}
+                {message && <div className="msg success-msg">{message}</div>}
+                {error && <div className="msg error-msg">{error}</div>}
+
+                <button type="submit" className="btn-update" disabled={isLoading || !newPassword}>
+                    {isLoading ? 'Updating protocols...' : 'Update Credentials'}
                 </button>
             </form>
 
             <button onClick={logout} className="btn-logout">
-                <LogOut size={16} /> Sign Out
+                <LogOut size={16} /> Terminate Session
             </button>
         </div>
     );

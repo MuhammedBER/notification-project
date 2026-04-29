@@ -8,6 +8,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "*")
@@ -20,6 +22,16 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     public record PasswordChangeRequest(String newPassword) {
+    }
+
+    public record UserDTO(Long id, String username) {
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return ResponseEntity.ok(userRepository.findAll().stream()
+                .map(user -> new UserDTO(user.getId(), user.getUsername()))
+                .toList());
     }
 
     @GetMapping("/me")

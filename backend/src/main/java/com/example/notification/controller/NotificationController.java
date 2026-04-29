@@ -31,6 +31,8 @@ public class NotificationController {
     // REST endpoint to trigger a notification (useful for testing or external webhooks)
     @PostMapping("/send")
     public ResponseEntity<NotificationMessage> sendNotification(@RequestBody NotificationMessage notification) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        notification.setSenderName(username);
         NotificationMessage savedMessage = notificationService.sendNotification(notification);
         return ResponseEntity.ok(savedMessage);
     }
