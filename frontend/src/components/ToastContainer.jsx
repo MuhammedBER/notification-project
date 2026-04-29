@@ -1,25 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useNotifications } from './NotificationProvider';
 import { X, Info, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
-import { cn } from '../lib/utils';
+import './Toast.css';
 
 const IconMap = {
-    INFO: <Info className="w-5 h-5 text-blue-500" />,
-    WARNING: <AlertTriangle className="w-5 h-5 text-amber-500" />,
-    SUCCESS: <CheckCircle className="w-5 h-5 text-green-500" />,
-    ERROR: <XCircle className="w-5 h-5 text-red-500" />
+    INFO: <Info className="icon icon-info" />,
+    WARNING: <AlertTriangle className="icon icon-warning" />,
+    SUCCESS: <CheckCircle className="icon icon-success" />,
+    ERROR: <XCircle className="icon icon-error" />
 };
 
 export const ToastContainer = () => {
-    const { notifications } = useNotifications();
+    const { notifications, dismissNotification } = useNotifications();
     const [activeToasts, setActiveToasts] = useState([]);
 
+    // Watch for new notifications and add them to active toasts
     useEffect(() => {
         if (notifications.length > 0) {
             const latest = notifications[0];
+            // Check if it's new (in real app, we might check timestamps or have a 'viewed' flag)
+            // For simplicity, we just add the newest one if it's not already in toasts
             if (!activeToasts.find(t => t.id === latest.id)) {
-                setActiveToasts(prev => [latest, ...prev].slice(0, 5));
+                setActiveToasts(prev => [latest, ...prev].slice(0, 5)); // Keep max 5 toasts
                 
+                // Auto-dismiss after 5 seconds
                 const timer = setTimeout(() => {
                     removeToast(latest.id);
                 }, 5000);
@@ -34,22 +38,20 @@ export const ToastContainer = () => {
     };
 
     return (
-        <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 w-full max-w-sm pointer-events-none">
+        <div className="toast-container">
             {activeToasts.map(toast => (
-                <div key={toast.id} className="pointer-events-auto flex items-start gap-3 rounded-lg border bg-background p-4 shadow-lg transition-all animate-in slide-in-from-right sm:slide-in-from-bottom">
-                    <div className="mt-0.5">
+                <div key={toast.id} className={`toast fade-in slide-in type-${toast.type}`}>
+                    <div className="toast-icon">
                         {IconMap[toast.type] || IconMap['INFO']}
                     </div>
-                    <div className="flex-1 space-y-1">
-                        <h4 className="text-sm font-medium leading-none">{toast.title}</h4>
-                        <p className="text-sm text-muted-foreground">{toast.message}</p>
+                    <div className="toast-content">
+                        <h4>{toast.title}</h4>
+                        <p>{toast.message}</p>
                     </div>
-                    <button 
-                        className="rounded-md p-1 text-muted-foreground hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2" 
-                        onClick={() => removeToast(toast.id)}
-                    >
+                    <button className="toast-close" onClick={() => removeToast(toast.id)}>
                         <X size={16} />
                     </button>
+                    <div className="toast-progress"></div>
                 </div>
             ))}
         </div>

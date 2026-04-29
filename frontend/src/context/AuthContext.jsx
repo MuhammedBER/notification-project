@@ -46,76 +46,24 @@ export const AuthProvider = ({ children }) => {
             body: JSON.stringify({ username, password })
         });
 
-        if (!response.ok) {
-            const msg = await response.text();
-            throw new Error(msg);
-        }
+        if (!response.ok) throw new Error('Login failed');
         const data = await response.json();
         setToken(data.token);
     };
 
-    const googleLogin = async (idToken) => {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/auth/google`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ idToken })
-        });
-
-        if (!response.ok) {
-            const msg = await response.text();
-            throw new Error(msg);
-        }
-        const data = await response.json();
-        setToken(data.token);
-    };
-
-    const register = async (username, email, password) => {
+    const register = async (username, password) => {
         const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, email, password })
+            body: JSON.stringify({ username, password })
         });
 
         if (!response.ok) {
             const msg = await response.text();
             throw new Error(msg);
         }
-        return await response.text(); // Return success message
-    };
-
-    const verifyEmail = async (token) => {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/auth/verify?token=${token}`);
-        if (!response.ok) {
-            const msg = await response.text();
-            throw new Error(msg);
-        }
-        return await response.text();
-    };
-
-    const forgotPassword = async (email) => {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/auth/forgot-password`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
-        });
-        if (!response.ok) {
-            const msg = await response.text();
-            throw new Error(msg);
-        }
-        return await response.text();
-    };
-
-    const resetPassword = async (token, newPassword) => {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/auth/reset-password`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token, newPassword })
-        });
-        if (!response.ok) {
-            const msg = await response.text();
-            throw new Error(msg);
-        }
-        return await response.text();
+        const data = await response.json();
+        setToken(data.token);
     };
 
     const logout = () => {
@@ -123,7 +71,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, isLoading, login, googleLogin, register, logout, verifyEmail, forgotPassword, resetPassword }}>
+        <AuthContext.Provider value={{ user, token, isLoading, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );

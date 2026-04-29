@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
@@ -36,9 +37,5 @@ public class UserController {
         userRepository.save(user);
 
         return ResponseEntity.ok("Password updated successfully");
-    }
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllUsers() {
-        return ResponseEntity.ok(userRepository.findAll());
     }
 }

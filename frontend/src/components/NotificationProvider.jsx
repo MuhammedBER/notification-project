@@ -84,8 +84,10 @@ export const NotificationProvider = ({ children }) => {
         setNotifications(prev => prev.filter(n => n.id !== id));
     };
 
+    const [activeGameId, setActiveGameId] = useState(null);
+
     return (
-        <NotificationContext.Provider value={{ notifications, isConnected, dismissNotification, stompClient }}>
+        <NotificationContext.Provider value={{ notifications, isConnected, dismissNotification, stompClient, activeGameId, setActiveGameId }}>
             {children}
         </NotificationContext.Provider>
     );
