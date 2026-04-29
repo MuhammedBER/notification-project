@@ -1,4 +1,6 @@
+import React, { useState, useEffect } from 'react';
 import { Send, Bell, Users, MessageSquare } from 'lucide-react';
+import './AdminPanel.css';
 
 export const AdminPanel = () => {
     const [title, setTitle] = useState('');
