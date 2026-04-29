@@ -1,4 +1,4 @@
-import { Send, Zap, Users, MessageSquare, Terminal } from 'lucide-react';
+import { Send, Bell, Users, MessageSquare } from 'lucide-react';
 
 export const AdminPanel = () => {
     const [title, setTitle] = useState('');
@@ -56,64 +56,55 @@ export const AdminPanel = () => {
     };
 
     return (
-        <div className="admin-panel glass-card">
+        <div className="admin-panel">
             <h2 className="panel-title">
-                <Terminal size={20} className="text-gradient" />
-                <span>Dispatch Center</span>
+                <Bell size={18} />
+                <span>Send Notification</span>
             </h2>
             
             <form onSubmit={handleSend} className="admin-form">
                 <div className="form-group">
-                    <label>
-                        <Users size={14} style={{ marginRight: '6px' }} />
-                        Target Audience
-                    </label>
+                    <label>Recipient</label>
                     <select
                         value={recipientUsername}
                         onChange={(e) => setRecipientUsername(e.target.value)}
                         className="user-select"
                     >
-                        <option value="">Global Broadcast</option>
+                        <option value="">Broadcast (All Users)</option>
                         {users.map(u => (
                             <option key={u.id} value={u.username}>
-                                Node: {u.username}
+                                User: {u.username}
                             </option>
                         ))}
                     </select>
                 </div>
 
                 <div className="form-group">
-                    <label>
-                        <Zap size={14} style={{ marginRight: '6px' }} />
-                        Signal Title
-                    </label>
+                    <label>Title</label>
                     <input
                         type="text"
                         className="admin-input"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Define signal header..."
+                        placeholder="Notification Title"
                         required
                     />
                 </div>
 
                 <div className="form-group">
-                    <label>
-                        <MessageSquare size={14} style={{ marginRight: '6px' }} />
-                        Payload
-                    </label>
+                    <label>Message</label>
                     <textarea
                         className="admin-textarea"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Enter transmission data..."
+                        placeholder="Write your message here..."
                         rows="3"
                         required
                     />
                 </div>
 
                 <div className="form-group">
-                    <label>Classification</label>
+                    <label>Priority / Type</label>
                     <div className="type-selectors">
                         {['INFO', 'SUCCESS', 'WARNING', 'ERROR'].map(t => (
                             <label key={t} className="type-option">
@@ -124,7 +115,7 @@ export const AdminPanel = () => {
                                     checked={type === t}
                                     onChange={() => setType(t)}
                                 />
-                                <div className={`type-box type-${t.toLowerCase()}`}>
+                                <div className="type-box">
                                     {t}
                                 </div>
                             </label>
@@ -132,9 +123,9 @@ export const AdminPanel = () => {
                     </div>
                 </div>
 
-                <button type="submit" className="btn-premium btn-dispatch" disabled={isLoading || !title || !message}>
-                    <Send size={18} />
-                    {isLoading ? 'Transmitting...' : 'Dispatch Signal'}
+                <button type="submit" className="btn-dispatch" disabled={isLoading || !title || !message}>
+                    <Send size={16} />
+                    {isLoading ? 'Sending...' : 'Send Now'}
                 </button>
             </form>
         </div>

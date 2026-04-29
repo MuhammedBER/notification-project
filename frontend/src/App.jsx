@@ -15,7 +15,7 @@ function AppContent() {
         return (
             <div className="loading-screen">
                 <div className="loader"></div>
-                <p>Synchronizing systems...</p>
+                <p>Loading Workspace...</p>
             </div>
         );
     }
@@ -25,12 +25,11 @@ function AppContent() {
     }
 
     return (
-        <div className="app-container slide-up">
+        <div className="app-container fade-in">
             <header className="app-header">
-                <h1 className="text-gradient">Nova Command</h1>
-                <div className="user-badge glass-card">
-                    <div className="status-dot online"></div>
-                    <span>System Active</span>
+                <h1>Notification Management</h1>
+                <div className="user-badge">
+                    <span>Logged in as: <strong>{user.username}</strong></span>
                 </div>
             </header>
             
@@ -42,13 +41,13 @@ function AppContent() {
                 
                 <section className="right-column">
                     <div className="dashboard-stats">
-                        <div className="stat-card glass-card">
-                            <span className="stat-label">System Health</span>
-                            <span className="stat-value">99.9%</span>
+                        <div className="stat-card">
+                            <span className="stat-label">Active Signals</span>
+                            <span className="stat-value">Healthy</span>
                         </div>
-                        <div className="stat-card glass-card">
-                            <span className="stat-label">Response Time</span>
-                            <span className="stat-value">24ms</span>
+                        <div className="stat-card">
+                            <span className="stat-label">System Node</span>
+                            <span className="stat-value">Primary</span>
                         </div>
                     </div>
                     <NotificationList />

@@ -4,30 +4,30 @@ import { Bell, Info, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import './NotificationList.css';
 
 const IconMap = {
-    INFO: <Info size={18} />,
-    WARNING: <AlertTriangle size={18} />,
-    SUCCESS: <CheckCircle size={18} />,
-    ERROR: <XCircle size={18} />
+    INFO: <Info size={16} />,
+    WARNING: <AlertTriangle size={16} />,
+    SUCCESS: <CheckCircle size={16} />,
+    ERROR: <XCircle size={16} />
 };
 
 export const NotificationList = () => {
     const { notifications, isConnected } = useNotifications();
 
     return (
-        <div className="notification-panel glass-card">
+        <div className="notification-panel">
             <div className="panel-header">
                 <div className="header-title">
-                    <Bell size={20} className="text-gradient" />
-                    <h2>Feed</h2>
+                    <Bell size={16} />
+                    <h2>Activity Feed</h2>
                 </div>
                 <div className={`status-badge ${isConnected ? 'online' : 'offline'}`}>
-                    {isConnected ? 'Sync Active' : 'Offline'}
+                    {isConnected ? 'Connected' : 'Offline'}
                 </div>
             </div>
             
             <div className="notification-list">
                 {notifications.length === 0 ? (
-                    <div className="empty-state">No transmissions recorded.</div>
+                    <div className="empty-state">No notifications to display.</div>
                 ) : (
                     notifications.map((notif, idx) => (
                         <div key={notif.id || idx} className="notification-item">
@@ -41,7 +41,7 @@ export const NotificationList = () => {
                                         {new Date(notif.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                                     </span>
                                 </div>
-                                {notif.senderName && <div className="sender-tag">Dispatcher: {notif.senderName}</div>}
+                                {notif.senderName && <div className="sender-tag">By: {notif.senderName}</div>}
                                 <p className="notification-message">{notif.message}</p>
                             </div>
                         </div>

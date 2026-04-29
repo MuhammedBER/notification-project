@@ -44,13 +44,10 @@ export const Profile = () => {
     if (!user) return null;
 
     return (
-        <div className="profile-panel glass-card">
+        <div className="profile-panel">
             <div className="profile-info">
-                <div className="avatar-container">
-                    <div className="avatar">
-                        <User size={32} />
-                    </div>
-                    <div className="avatar-ring"></div>
+                <div className="avatar">
+                    <User size={24} />
                 </div>
                 <div>
                     <h3 className="username">@{user.username}</h3>
@@ -60,8 +57,8 @@ export const Profile = () => {
 
             <form onSubmit={handlePasswordChange} className="password-form">
                 <div className="form-header">
-                    <Key size={16} /> 
-                    <span>Access Security</span>
+                    <Key size={14} /> 
+                    <span>Account Security</span>
                 </div>
                 
                 <div className="input-wrapper">
@@ -69,7 +66,7 @@ export const Profile = () => {
                         type="password"
                         value={newPassword}
                         onChange={e => setNewPassword(e.target.value)}
-                        placeholder="Configure new password"
+                        placeholder="Set new password"
                         required
                     />
                 </div>
@@ -78,12 +75,12 @@ export const Profile = () => {
                 {error && <div className="msg error-msg">{error}</div>}
 
                 <button type="submit" className="btn-update" disabled={isLoading || !newPassword}>
-                    {isLoading ? 'Updating protocols...' : 'Update Credentials'}
+                    {isLoading ? 'Updating...' : 'Update Password'}
                 </button>
             </form>
 
             <button onClick={logout} className="btn-logout">
-                <LogOut size={16} /> Terminate Session
+                <LogOut size={16} /> Sign Out
             </button>
         </div>
     );

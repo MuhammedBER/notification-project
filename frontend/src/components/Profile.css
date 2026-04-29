@@ -1,152 +1,133 @@
 .profile-panel {
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
 }
 
 .profile-info {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--glass-border);
-}
-
-.avatar-container {
-    position: relative;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .avatar {
-    width: 80px;
-    height: 80px;
-    background: var(--accent-gradient);
-    border-radius: var(--radius-lg);
+    width: 48px;
+    height: 48px;
+    background: #eff6ff;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    box-shadow: 0 8px 16px rgba(88, 166, 255, 0.2);
-}
-
-.avatar-ring {
-    position: absolute;
-    inset: -4px;
-    border: 2px solid var(--accent-primary);
-    border-radius: calc(var(--radius-lg) + 4px);
-    opacity: 0.3;
+    color: var(--primary-color);
+    border: 1px solid #dbeafe;
 }
 
 .username {
-    font-size: 1.5rem;
+    font-size: 1.125rem;
     font-weight: 700;
-    color: var(--text-main);
+    color: var(--text-color);
     margin: 0;
 }
 
 .role-badge {
-    font-size: 0.7rem;
-    background: rgba(88, 166, 255, 0.1);
-    color: var(--accent-primary);
-    padding: 0.2rem 0.6rem;
-    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    background: #f1f5f9;
+    color: var(--text-muted);
+    padding: 0.125rem 0.5rem;
+    border-radius: 4px;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border: 1px solid rgba(88, 166, 255, 0.2);
 }
 
 .password-form {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--surface-border);
 }
 
 .form-header {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.input-wrapper {
-    position: relative;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-color);
 }
 
 .input-wrapper input {
     width: 100%;
-    padding: 1rem 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
+    padding: 0.625rem 0.75rem;
+    background: #fff;
+    border: 1px solid var(--surface-border);
     border-radius: var(--radius-md);
-    color: var(--text-main);
+    color: var(--text-color);
     font-family: inherit;
-    font-size: 1rem;
-    outline: none;
+    font-size: 0.875rem;
 }
 
 .input-wrapper input:focus {
-    border-color: var(--accent-primary);
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 0 4px rgba(88, 166, 255, 0.1);
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px #eff6ff;
 }
 
 .msg {
-    padding: 0.75rem;
-    border-radius: var(--radius-md);
-    font-size: 0.85rem;
+    padding: 0.625rem;
+    border-radius: 6px;
+    font-size: 0.8125rem;
     font-weight: 500;
 }
 
 .success-msg {
-    background: rgba(63, 185, 80, 0.1);
-    color: var(--success);
-    border: 1px solid rgba(63, 185, 80, 0.2);
+    background: var(--success-bg);
+    color: var(--success-color);
 }
 
 .error-msg {
-    background: rgba(248, 81, 73, 0.1);
-    color: var(--error);
-    border: 1px solid rgba(248, 81, 73, 0.2);
+    background: var(--error-bg);
+    color: var(--error-color);
 }
 
 .btn-update {
     width: 100%;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
+    padding: 0.625rem;
+    background: #f8fafc;
+    border: 1px solid var(--surface-border);
     border-radius: var(--radius-md);
-    color: var(--text-main);
+    color: var(--text-color);
     font-weight: 600;
+    font-size: 0.875rem;
     cursor: pointer;
+    transition: all 0.2s;
 }
 
 .btn-update:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--text-muted);
+    background: #f1f5f9;
+    border-color: #cbd5e1;
 }
 
 .btn-logout {
+    width: 100%;
     margin-top: 1rem;
-    padding: 1rem;
+    padding: 0.625rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     background: transparent;
-    color: var(--error);
-    border: 1px solid rgba(248, 81, 73, 0.3);
+    color: var(--error-color);
+    border: 1px solid #fee2e2;
     border-radius: var(--radius-md);
     cursor: pointer;
     font-weight: 600;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 0.875rem;
+    transition: all 0.2s;
 }
 
 .btn-logout:hover {
-    background: rgba(248, 81, 73, 0.1);
-    border-color: var(--error);
+    background: #fef2f2;
 }
