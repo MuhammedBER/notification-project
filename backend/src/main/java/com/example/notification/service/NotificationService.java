@@ -43,6 +43,6 @@ public class NotificationService {
     }
 
     public List<NotificationMessage> getNotificationHistory(String username) {
-        return notificationRepository.findByRecipientUsernameOrRecipientUsernameIsNullOrderByTimestampDesc(username);
+        return notificationRepository.findNotificationsForUser(username);
     }
 }

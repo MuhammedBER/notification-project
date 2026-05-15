@@ -47,7 +47,10 @@ export const NotificationProvider = ({ children }) => {
                 client.subscribe('/topic/public', (message) => {
                     if (message.body) {
                         const newNotification = JSON.parse(message.body);
-                        setNotifications(prev => [newNotification, ...prev]);
+                        // Don't show if I sent it
+                        if (newNotification.senderName !== user.username) {
+                            setNotifications(prev => [newNotification, ...prev]);
+                        }
                     }
                 });
 
@@ -55,7 +58,10 @@ export const NotificationProvider = ({ children }) => {
                 client.subscribe(`/topic/user.${user.username}`, (message) => {
                     if (message.body) {
                         const newNotification = JSON.parse(message.body);
-                        setNotifications(prev => [newNotification, ...prev]);
+                        // Don't show if I sent it (even if sent to myself)
+                        if (newNotification.senderName !== user.username) {
+                            setNotifications(prev => [newNotification, ...prev]);
+                        }
                     }
                 });
 
